@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -25,6 +27,7 @@ public class viewDM extends JFrame {
     private JButton deleteButton;
     private JButton backButton;
     private JButton VAT_Button;
+    private JButton sumOfDM;
     private JTextField idTextField;
     private JTextField tenHangTextField;
     private JTextField soLuongTonTextField;
@@ -71,6 +74,7 @@ public class viewDM extends JFrame {
         deleteButton = new JButton("Xóa");
         backButton = new JButton("<< Quay trở lại trang chủ");
         VAT_Button = new JButton("VAT");
+        sumOfDM = new JButton("Tổng số lượng hàng hóa của điện máy");
 
         // Add
         inputPanel.add(new JLabel("ID:"));
@@ -91,6 +95,7 @@ public class viewDM extends JFrame {
         inputPanel.add(deleteButton);
         inputPanel.add(backButton);
         inputPanel.add(VAT_Button);
+        inputPanel.add(sumOfDM);
 
         add(inputPanel, BorderLayout.SOUTH);
 
@@ -121,6 +126,12 @@ public class viewDM extends JFrame {
         VAT_Button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 VAT_Items();
+            }
+        });
+
+        sumOfDM.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                sumDM();
             }
         });
 
@@ -211,7 +222,6 @@ public class viewDM extends JFrame {
         congSuatTextField.setText("");
     }
 
-
     protected void backPage() {
         JFrame viewPage = new ManagementApp();
         viewPage.setLocationRelativeTo(null);
@@ -219,5 +229,28 @@ public class viewDM extends JFrame {
 
         viewPage.setVisible(true);
         dispose();
+    }
+
+    private void sumDM(){
+        Map<String, Integer> typeQuantityMap = new HashMap<>();
+
+        // Iterate through the list of KhoHang objects and calculate the total quantity for each type
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            String type = (String) tableModel.getValueAt(i, 1); // Assuming the type is in the second column (index 1)
+            int quantity = (int) tableModel.getValueAt(i, 2); // Assuming the quantity is in the third column (index 2)
+
+            // Check if the type is already in the map, if yes, update the total quantity, otherwise, add it to the map
+            typeQuantityMap.put(type, typeQuantityMap.getOrDefault(type, 0) + quantity);
+        }
+
+        // Create a string to display the results in the dialog box
+        StringBuilder result = new StringBuilder();
+        result.append("Tổng số lượng hàng hóa của điện máy:\n");
+        for (Map.Entry<String, Integer> entry : typeQuantityMap.entrySet()) {
+            result.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+        }
+
+        // Show the results in a dialog box
+        JOptionPane.showMessageDialog(this, result.toString());
     }
 }

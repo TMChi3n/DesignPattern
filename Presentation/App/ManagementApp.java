@@ -13,12 +13,12 @@ public class ManagementApp extends JFrame{
     private JButton tpBtn;
     private JButton dmBtn;
     private JButton ssBtn;
-    private JButton sumBtn;
+    private JButton exitBtn;
 
     public ManagementApp() {
 
         setTitle("Kho hàng");
-        setSize(800, 200);
+        setSize(600, 200);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -29,12 +29,12 @@ public class ManagementApp extends JFrame{
         tpBtn = new JButton("Thực phẩm");
         dmBtn = new JButton("Điện máy");
         ssBtn = new JButton("Sành sứ");
-        sumBtn = new JButton("Tổng số lượng hàng hóa");
+        exitBtn = new JButton("Thoát chương trình");
 
         inputPanel.add(tpBtn);
         inputPanel.add(dmBtn);
         inputPanel.add(ssBtn);
-        inputPanel.add(sumBtn);
+        inputPanel.add(exitBtn);
 
         add(inputPanel, BorderLayout.SOUTH);
 
@@ -56,16 +56,17 @@ public class ManagementApp extends JFrame{
             }
         });
 
-        sumBtn.addActionListener(new ActionListener() {
+        exitBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                sumOfGoods();
+                exitApplication();
             }
         });
 
     }
 
-    private void sumOfGoods() {
-        
+    private void exitApplication() {
+        System.exit(0);
+        //
     }
 
     private void pageViewSS() {
@@ -99,5 +100,7 @@ public class ManagementApp extends JFrame{
         viewTPFrame.setVisible(true);
         dispose();
     }
+
+    
 
 }
