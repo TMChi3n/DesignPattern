@@ -1,4 +1,4 @@
-package Frame;
+package Presentation.App;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -7,18 +7,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.event.*;
 
-
-import ThucPham.viewTP;
-import DienMay.viewDM;
-import SanhSu.viewSS;
-
-public class view extends JFrame{
+public class ManagementApp extends JFrame{
 
     private DefaultTableModel tableModel;
     private JTable table;
@@ -26,17 +19,26 @@ public class view extends JFrame{
     private JButton dmBtn;
     private JButton ssBtn;
     private JButton sumBtn;
-    private CardLayout cardLayout;
-    private JPanel mainPanel;
 
-    private JFrame currentPage;
-
-    public view() {
+    public ManagementApp() {
 
         setTitle("Kho hàng");
-        setSize(600, 600);
+        setSize(1000, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+
+        tableModel = new DefaultTableModel();
+        tableModel.addColumn("ID");
+        tableModel.addColumn("Tên hàng");
+        tableModel.addColumn("Số lượng tồn");
+        tableModel.addColumn("Đơn giá");
+        tableModel.addColumn("Nhà cung cấp");
+        tableModel.addColumn("Ngày sản xuất");
+        tableModel.addColumn("Ngày hết hạn");
+        tableModel.addColumn("Bảo hành");
+        tableModel.addColumn("Công suất");
+        tableModel.addColumn("Nhà sản xuất");
+        tableModel.addColumn("Ngày nhập kho");
 
         table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(table);
@@ -44,10 +46,6 @@ public class view extends JFrame{
 
         // TextField
         JPanel inputPanel = new JPanel(new GridLayout(15, 2));
-
-        cardLayout = new CardLayout();
-        mainPanel = new JPanel(cardLayout);
-        add(mainPanel, BorderLayout.CENTER);
 
         // Button
         tpBtn = new JButton("Thực phẩm");
@@ -89,6 +87,8 @@ public class view extends JFrame{
     }
 
     private void sumOfGoods() {
+
+        //
     }
 
     private void pageViewSS() {
@@ -103,7 +103,7 @@ public class view extends JFrame{
     }
 
     private void pageViewDM() {
-        JFrame viewDMFrame = new viewTP();
+        JFrame viewDMFrame = new viewDM();
 
         viewDMFrame.setLocationRelativeTo(null); // Hiển thị cửa sổ ở giữa màn hình
         viewDMFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Đóng frame khi bấm nút X (không thoát toàn bộ ứng dụng)
