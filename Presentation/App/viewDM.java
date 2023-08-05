@@ -38,7 +38,7 @@ public class viewDM extends JFrame {
 
         dm_Service = new DM_ServiceImpl();
 
-        setTitle("Kho hàng");
+        setTitle("Điện máy");
         setSize(1000, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());

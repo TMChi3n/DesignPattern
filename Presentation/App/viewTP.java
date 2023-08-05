@@ -43,7 +43,7 @@ public class viewTP extends JFrame {
 
         tp_Service = new TP_ServiceImpl();
 
-        setTitle("Kho hàng");
+        setTitle("Thực phẩm");
         setSize(1000, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -100,8 +100,8 @@ public class viewTP extends JFrame {
         inputPanel.add(updateButton);
         inputPanel.add(deleteButton);
         inputPanel.add(findButton);
-        inputPanel.add(backButton);
         inputPanel.add(VAT_Button);
+        inputPanel.add(backButton);
 
         add(inputPanel, BorderLayout.SOUTH);
 

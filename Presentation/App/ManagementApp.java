@@ -3,9 +3,6 @@ package Presentation.App;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -13,8 +10,6 @@ import java.awt.event.*;
 
 public class ManagementApp extends JFrame{
 
-    private DefaultTableModel tableModel;
-    private JTable table;
     private JButton tpBtn;
     private JButton dmBtn;
     private JButton ssBtn;
@@ -23,29 +18,12 @@ public class ManagementApp extends JFrame{
     public ManagementApp() {
 
         setTitle("Kho hàng");
-        setSize(1000, 800);
+        setSize(800, 200);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        tableModel = new DefaultTableModel();
-        tableModel.addColumn("ID");
-        tableModel.addColumn("Tên hàng");
-        tableModel.addColumn("Số lượng tồn");
-        tableModel.addColumn("Đơn giá");
-        tableModel.addColumn("Nhà cung cấp");
-        tableModel.addColumn("Ngày sản xuất");
-        tableModel.addColumn("Ngày hết hạn");
-        tableModel.addColumn("Bảo hành");
-        tableModel.addColumn("Công suất");
-        tableModel.addColumn("Nhà sản xuất");
-        tableModel.addColumn("Ngày nhập kho");
-
-        table = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(table);
-        add(scrollPane, BorderLayout.CENTER);
-
         // TextField
-        JPanel inputPanel = new JPanel(new GridLayout(15, 2));
+        JPanel inputPanel = new JPanel(new GridLayout(4, 2));
 
         // Button
         tpBtn = new JButton("Thực phẩm");
@@ -87,8 +65,7 @@ public class ManagementApp extends JFrame{
     }
 
     private void sumOfGoods() {
-
-        //
+        
     }
 
     private void pageViewSS() {
@@ -122,7 +99,5 @@ public class ManagementApp extends JFrame{
         viewTPFrame.setVisible(true);
         dispose();
     }
-
-    
 
 }

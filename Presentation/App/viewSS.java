@@ -41,7 +41,7 @@ public class viewSS extends JFrame{
 
         ss_Service = new SS_ServiceImpl();
 
-        setTitle("Kho hàng");
+        setTitle("sành sứ");
         setSize(1000, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
