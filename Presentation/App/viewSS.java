@@ -18,8 +18,6 @@ import Domain.Model.SanhSu;
 import Presentation.CommandProcessor.Cmd_SS.Cmd_Processor_SS;
 import Presentation.CommandProcessor.Cmd_SS.CommandSS;
 import Presentation.CommandProcessor.Cmd_SS.VAT_SS_Cmd;
-import Presentation.CommandProcessor.Cmd_TP.Cmd_Processor_TP;
-import Presentation.CommandProcessor.Cmd_TP.VAT_TP_Cmd;
 
 public class viewSS extends JFrame{
 
