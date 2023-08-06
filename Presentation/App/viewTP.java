@@ -20,7 +20,7 @@ import Presentation.CommandProcessor.Cmd_TP.Cmd_Processor_TP;
 import Presentation.CommandProcessor.Cmd_TP.CommandTP;
 import Presentation.CommandProcessor.Cmd_TP.VAT_TP_Cmd;
 
-public class viewTP extends JFrame {
+public class viewTP extends JFrame{
 
     private DefaultTableModel tableModel;
     private JTable table;
@@ -152,8 +152,6 @@ public class viewTP extends JFrame {
             }
         });
 
-
-
         loadItems();
     }
 
@@ -161,7 +159,7 @@ public class viewTP extends JFrame {
     private void VAT_Items() {
         int row = table.getSelectedRow();
         if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a ThucPham item to calculate VAT.");
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn thực phẩm có ở trên bảng");
             return;
         }
 
@@ -198,18 +196,25 @@ public class viewTP extends JFrame {
         Date ngayHetHan = parseDate(ngayHetHanTextField.getText());
         String nhaCungCap = nhaCungCapTextField.getText();
 
-        ThucPham thucPham = new ThucPham(id, name, soLuongTon, donGia, ngaySanXuat, ngayHetHan, nhaCungCap);
-        tp_Service.addTP(thucPham);
+        if (soLuongTon < 0 || donGia <= 0) {
+            JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
+            clearFieldS();
+        } else {
+            ThucPham thucPham = new ThucPham(id, name, soLuongTon, donGia, ngaySanXuat, ngayHetHan, nhaCungCap);
+            tp_Service.addTP(thucPham);
 
-        loadItems();
-        clearFieldS();
+            loadItems();
+            clearFieldS();
+        }  
+
+        
     }
 
 // UPDATE ITEMS    
     private void updateItems() {
         int row = table.getSelectedRow();
         if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a goods to edit");
+            JOptionPane.showMessageDialog(this, "Chọn thực phẩm trên bảng để cập nhật");
         }
 
         int id = Integer.parseInt(idTextField.getText());
@@ -220,17 +225,23 @@ public class viewTP extends JFrame {
         Date ngayHetHan = parseDate(ngayHetHanTextField.getText());
         String nhaCungCap = nhaCungCapTextField.getText();
 
-        ThucPham thucPham = new ThucPham(id, name, soLuongTon, donGia, ngaySanXuat, ngayHetHan, nhaCungCap);
-        tp_Service.updateTP(thucPham);
+        if (soLuongTon < 0 || donGia <= 0) {
+            JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
+            clearFieldS();
+        } else {
+            ThucPham thucPham = new ThucPham(id, name, soLuongTon, donGia, ngaySanXuat, ngayHetHan, nhaCungCap);
+            tp_Service.addTP(thucPham);
 
-        loadItems();
+            loadItems();
+            clearFieldS();
+        }
     }
 
 // DELETE ITEMS
     private void deleteItems() {
         int row = table.getSelectedRow();
         if(row == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a goods to delete");
+            JOptionPane.showMessageDialog(this, "Chọn thực phẩm trên bảng để xóa");
             return;
         }
 
@@ -242,18 +253,19 @@ public class viewTP extends JFrame {
 
 // FIND ITEMS BY WEEK    
     private void findItems() {
+        
         try {
-            // Get the production and expiry dates from the user input
+            // Lấy ngày sản xuất và hạn sử dụng từ đầu vào của người dùng
             String NSX_String = ngaySanXuatTextField.getText();
             String NHH_String = ngayHetHanTextField.getText();
 
-            // Parse the dates from strings to Date objects
+            // Chuyển đổi ngày từ chuỗi thành đối tượng Ngày
             Date ngaySanXuat = parseDate(NSX_String);
             Date ngayHetHan = parseDate(NHH_String);
 
-            // Check if the date parsing is successful
+            // Kiểm tra việc định dạng ngày
             if (ngaySanXuat == null || ngayHetHan == null) {
-                JOptionPane.showMessageDialog(this, "Please enter valid dates in the format yyyy/MM/dd.");
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập theo đúng định dang yyyy/MM/dd");
                 return;
             }
 
@@ -266,7 +278,7 @@ public class viewTP extends JFrame {
             }
         } catch (NumberFormatException ex) {
             // Handle the case when the input is not a valid number
-            JOptionPane.showMessageDialog(this, "Please enter valid dates in the format yyyy/MM/dd.");
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập the đúng định dạng yyyy/MM/dd");
         }
 
         loadItems();
@@ -277,14 +289,13 @@ public class viewTP extends JFrame {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
         try {
-            // Parse the date string to a Date object
+            // Chuyển đổi đối tượng chuỗi thành ngày
             Date date = dateFormat.parse(dateString);
             return date;
             
         } catch (ParseException e) {
             e.printStackTrace();
-            // Handle the parsing exception as needed
-            // For example, show an error message to the user.
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập cho đúng định dạng yyyy/MM/dd");
         }
 
         return null; // Return null if the parsing fails
@@ -316,23 +327,24 @@ public class viewTP extends JFrame {
     private void sumTP(){
         Map<String, Integer> typeQuantityMap = new HashMap<>();
 
-        // Iterate through the list of KhoHang objects and calculate the total quantity for each type
+        // Lặp lại danh sách các đối tượng KhoHang và tính tổng số lượng cho từng loại
         for (int i = 0; i < tableModel.getRowCount(); i++) {
             String type = (String) tableModel.getValueAt(i, 1); // Assuming the type is in the second column (index 1)
             int quantity = (int) tableModel.getValueAt(i, 2); // Assuming the quantity is in the third column (index 2)
 
-            // Check if the type is already in the map, if yes, update the total quantity, otherwise, add it to the map
+            //Kiểm tra xem loại đã có chưa the map, if yes, update the total quantity, nếu không thì, add it to the map
             typeQuantityMap.put(type, typeQuantityMap.getOrDefault(type, 0) + quantity);
         }
 
-        // Create a string to display the results in the dialog box
+        // Tạo một chuỗi để hiển thị kết quả trong hộp thoại
         StringBuilder result = new StringBuilder();
         result.append("Tổng số lượng hàng hóa của thực phẩm:\n");
         for (Map.Entry<String, Integer> entry : typeQuantityMap.entrySet()) {
             result.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
         }
 
-        // Show the results in a dialog box
+        // Hiển thị kết quả trong hộp thoại
         JOptionPane.showMessageDialog(this, result.toString());
     }
+
 }

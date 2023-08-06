@@ -145,7 +145,7 @@ public class viewSS extends JFrame{
     private void VAT_Items() {
         int row = table.getSelectedRow();
         if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a ThucPham item to calculate VAT.");
+            JOptionPane.showMessageDialog(this, "Chọn hàng trên bảng để tính thuế");
             return;
         }
 
@@ -176,7 +176,7 @@ public class viewSS extends JFrame{
     private void deleteItems() {
         int row = table.getSelectedRow();
         if(row == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a goods to delete");
+            JOptionPane.showMessageDialog(this, "Chọn hàng có trên bảng để xóa");
             return;
         }
 
@@ -189,7 +189,7 @@ public class viewSS extends JFrame{
     private void updateItems() {
         int row = table.getSelectedRow();
         if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a goods to edit");
+            JOptionPane.showMessageDialog(this, "Chọn hàng có trên bảng để cập nhật");
         }
 
         int id = Integer.parseInt(idTextField.getText());
@@ -199,10 +199,18 @@ public class viewSS extends JFrame{
         String nhaSanXuat = nhaSanXuatTextField.getText();
         Date ngayNhapKho = parseDate(ngayNhapKhoTextField.getText());
 
-        SanhSu sanhSu = new SanhSu(id, name, soLuongTon, donGia, nhaSanXuat, ngayNhapKho);
-        ss_Service.updateSS(sanhSu);
+        if (soLuongTon < 0 || donGia <= 0) {
+            JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
+            clearFieldS();
+        } else {
+            SanhSu sanhSu = new SanhSu(id, name, soLuongTon, donGia, nhaSanXuat, ngayNhapKho);
+            ss_Service.updateSS(sanhSu);
 
-        loadItems();
+            loadItems();
+            clearFieldS();
+        }
+
+        
     }
 
 // ADD ITEMS    
@@ -214,11 +222,16 @@ public class viewSS extends JFrame{
         String nhaSanXuat = nhaSanXuatTextField.getText();
         Date ngayNhapKho = parseDate(ngayNhapKhoTextField.getText());
 
-        SanhSu sanhSu = new SanhSu(id, name, soLuongTon, donGia, nhaSanXuat, ngayNhapKho);
-        ss_Service.addSS(sanhSu);
+        if (soLuongTon < 0 || donGia <= 0) {
+            JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
+            clearFieldS();
+        } else {
+            SanhSu sanhSu = new SanhSu(id, name, soLuongTon, donGia, nhaSanXuat, ngayNhapKho);
+            ss_Service.updateSS(sanhSu);
 
-        loadItems();
-        clearFieldS();
+            loadItems();
+            clearFieldS();
+        }  
     }
 
 // CONVERT DATE TO STRING    
@@ -264,10 +277,9 @@ public class viewSS extends JFrame{
     private void sumSS(){
         Map<String, Integer> typeQuantityMap = new HashMap<>();
 
-        // Iterate through the list of KhoHang objects and calculate the total quantity for each type
         for (int i = 0; i < tableModel.getRowCount(); i++) {
-            String type = (String) tableModel.getValueAt(i, 1); // Assuming the type is in the second column (index 1)
-            int quantity = (int) tableModel.getValueAt(i, 2); // Assuming the quantity is in the third column (index 2)
+            String type = (String) tableModel.getValueAt(i, 1);
+            int quantity = (int) tableModel.getValueAt(i, 2); // Giả sử số lượng ở cột thứ ba (index 2)
 
             // Check if the type is already in the map, if yes, update the total quantity, otherwise, add it to the map
             typeQuantityMap.put(type, typeQuantityMap.getOrDefault(type, 0) + quantity);

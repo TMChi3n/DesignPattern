@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Date;
 
 import Domain.Model.ThucPham;
+import Presentation.App.viewTP;
 
 public interface TP_Service {
     void addTP(ThucPham thucPham);

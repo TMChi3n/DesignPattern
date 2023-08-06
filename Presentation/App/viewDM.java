@@ -142,7 +142,7 @@ public class viewDM extends JFrame {
     private void VAT_Items() {
         int row = table.getSelectedRow();
         if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a ThucPham item to calculate VAT.");
+            JOptionPane.showMessageDialog(this, "Chọn hàng trên bảng để tính thuế.");
             return;
         }
 
@@ -174,17 +174,25 @@ public class viewDM extends JFrame {
         int baoHanh = Integer.parseInt(baoHanhTextField.getText());
         double congSuat = Double.parseDouble(congSuatTextField.getText());
 
-        DienMay dienMay = new DienMay(id, name, soLuongTon, donGia, baoHanh, congSuat);
-        dm_Service.addDM(dienMay);
+        if (soLuongTon < 0 || donGia <= 0 || baoHanh <= 0 || congSuat < 0) {
+            JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
+            clearFieldS();
+        } else {
+            DienMay dienMay = new DienMay(id, name, soLuongTon, donGia, baoHanh, congSuat);
+            dm_Service.addDM(dienMay);
 
-        loadItems();
-        clearFieldS();
+            loadItems();
+            clearFieldS();
+        }
+        
+            
     }
+    
 
     private void updateItems() {
         int row = table.getSelectedRow();
         if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a goods to edit");
+            JOptionPane.showMessageDialog(this, "Chọn hàng trên bảng để cập nhật");
         }
 
         int id = Integer.parseInt(idTextField.getText());
@@ -194,16 +202,22 @@ public class viewDM extends JFrame {
         int baoHanh = Integer.parseInt(baoHanhTextField.getText());
         double congSuat = Double.parseDouble(congSuatTextField.getText());
 
-        DienMay dienMay = new DienMay(id, name, soLuongTon, donGia, baoHanh, congSuat);
-        dm_Service.addDM(dienMay);
+        if (soLuongTon < 0 || donGia <= 0 || baoHanh <= 0 || congSuat < 0) {
+            JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
+            clearFieldS();
+        } else {
+            DienMay dienMay = new DienMay(id, name, soLuongTon, donGia, baoHanh, congSuat);
+            dm_Service.addDM(dienMay);
 
-        loadItems();
+            loadItems();
+            clearFieldS();
+        }
     }
 
     private void deleteItems() {
         int row = table.getSelectedRow();
         if(row == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a goods to delete");
+            JOptionPane.showMessageDialog(this, "Chọn hàng trên bảng để xóa");
             return;
         }
 

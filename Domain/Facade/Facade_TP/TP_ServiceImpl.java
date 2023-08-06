@@ -14,31 +14,39 @@ public class TP_ServiceImpl implements TP_Service{
 
     public TP_ServiceImpl(){
         tp_DAO = new HangTP_DAOImpl(new HangTP_JdbcGateway());
+       
     }
 
     @Override
     public void addTP(ThucPham thucPham) {
         tp_DAO.addTP(thucPham);
+       
     }
 
     @Override
     public void updateTP(ThucPham thucPham) {
         tp_DAO.updateTP(thucPham);
+       
     }
 
     @Override
     public void deleteTP(int idTP) {
         tp_DAO.deleteTP(idTP);
+        
     }
 
     @Override
     public List<ThucPham> getTPOneWeek(Date startDate, Date endDate) {
+        
         return tp_DAO.getTPOneWeek(startDate, endDate);
     }
 
     @Override
     public List<ThucPham> getAllTP() {
+       
         return tp_DAO.getAllTP();
     }
+
+    
     
 }
