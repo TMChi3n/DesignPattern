@@ -253,36 +253,43 @@ public class viewTP extends JFrame{
 
 // FIND ITEMS BY WEEK    
     private void findItems() {
-        
-        try {
-            // Lấy ngày sản xuất và hạn sử dụng từ đầu vào của người dùng
-            String NSX_String = ngaySanXuatTextField.getText();
-            String NHH_String = ngayHetHanTextField.getText();
-
-            // Chuyển đổi ngày từ chuỗi thành đối tượng Ngày
-            Date ngaySanXuat = parseDate(NSX_String);
-            Date ngayHetHan = parseDate(NHH_String);
-
-            // Kiểm tra việc định dạng ngày
-            if (ngaySanXuat == null || ngayHetHan == null) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập theo đúng định dang yyyy/MM/dd");
-                return;
-            }
-
-            long differenceInDays = (ngayHetHan.getTime() - ngaySanXuat.getTime()) / (1000 * 60 * 60 * 24);
-
-            if (differenceInDays <= 7) {
-                JOptionPane.showMessageDialog(this, "Tìm thấy hàng còn tồn tại.");
-            } else {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy hàng.");
-            }
-        } catch (NumberFormatException ex) {
-            // Handle the case when the input is not a valid number
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập the đúng định dạng yyyy/MM/dd");
-        }
-
-        loadItems();
+        int selectedRow = table.getSelectedRow();
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Vui lòng chọn một dòng trong bảng để tìm kiếm.");
+        return;
     }
+
+    try {
+        // Get the selected ThucPham object from the table row
+        int id = (int) tableModel.getValueAt(selectedRow, 0);
+        String name = (String) tableModel.getValueAt(selectedRow, 1);
+        int soLuongTon = (int) tableModel.getValueAt(selectedRow, 2);
+        double donGia = (double) tableModel.getValueAt(selectedRow, 3);
+        Date ngaySanXuat = (Date) tableModel.getValueAt(selectedRow, 5);
+        Date ngayHetHan = (Date) tableModel.getValueAt(selectedRow, 6);
+        String nhaCungCap = (String) tableModel.getValueAt(selectedRow, 4);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        String ngaySanXuatString = dateFormat.format(ngaySanXuat);
+        String ngayHetHanString = dateFormat.format(ngayHetHan);
+
+        // Calculate the difference in days between the expiration date and the current date
+        Date currentDate = new Date();
+        long differenceInDays = (ngayHetHan.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
+
+        if (differenceInDays < 7) {
+            JOptionPane.showMessageDialog(this, "Sản phẩm " + name + " còn hạn sử dụng đến ngày " + ngayHetHanString);
+        } else {
+            JOptionPane.showMessageDialog(this, "Sản phẩm " + name + " đã hết hạn từ ngày " + ngayHetHanString);
+        }
+    } catch (NumberFormatException ex) {
+        // Handle the case when the input is not a valid number
+        JOptionPane.showMessageDialog(this, "Vui lòng nhập the đúng định dạng yyyy/MM/dd");
+    }
+    }
+
+
+
 
 // CONVERT DATE     
     private Date parseDate(String dateString) {
@@ -292,16 +299,14 @@ public class viewTP extends JFrame{
             // Chuyển đổi đối tượng chuỗi thành ngày
             Date date = dateFormat.parse(dateString);
             return date;
-            
         } catch (ParseException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Vui lòng nhập cho đúng định dạng yyyy/MM/dd");
         }
 
         return null; // Return null if the parsing fails
-    
-        
     }
+
 
 // CLEAR FIELDS WHEN ADD SUCCESS    
     private void clearFieldS() {
