@@ -9,30 +9,30 @@ import Pesistence.DAO_DM.HangDM_JdbcGateway;
 
 public class DM_ServiceImpl implements DM_Service{
 
-    private HangDM_DAO dm_DAO;
+    private HangDM_DAO dm_DAORemote;
 
     public DM_ServiceImpl() {
-        dm_DAO = new HangDM_DAOImpl(new HangDM_JdbcGateway());
+        dm_DAORemote = new HangDM_DAOImpl(new HangDM_JdbcGateway());
     }
 
     @Override
     public void addDM(DienMay dienMay) {
-        dm_DAO.addDM(dienMay);
+        dm_DAORemote.addDM(dienMay);
     }
 
     @Override
     public void updateDM(DienMay dienMay) {
-        dm_DAO.updateDM(dienMay);
+        dm_DAORemote.updateDM(dienMay);
     }
 
     @Override
     public void deleteDM(int idDM) {
-        dm_DAO.deleteDM(idDM);
+        dm_DAORemote.deleteDM(idDM);
     }
 
     @Override
     public List<DienMay> getAllDM() {
-        return dm_DAO.getAllDM();
+        return dm_DAORemote.getAllDM();
     }
     
 }

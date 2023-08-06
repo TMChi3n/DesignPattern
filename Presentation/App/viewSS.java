@@ -38,11 +38,11 @@ public class viewSS extends JFrame{
     private JTextField nhaSanXuatTextField;
     private JTextField ngayNhapKhoTextField;
 
-    private SS_Service ss_Service;
+    private SS_Service ss_ServiceRemote;
     
     public viewSS() {
 
-        ss_Service = new SS_ServiceImpl();
+        ss_ServiceRemote = new SS_ServiceImpl();
 
         setTitle("sành sứ");
         setSize(1000, 800);
@@ -150,7 +150,7 @@ public class viewSS extends JFrame{
         }
 
         // Get the ThucPham object from the selected row index
-        SanhSu sanhSu = ss_Service.getAllSS().get(row);
+        SanhSu sanhSu = ss_ServiceRemote.getAllSS().get(row);
 
          // Create the VAT command and set the ThucPham object
         CommandSS vatSSCommand = new VAT_SS_Cmd(sanhSu);
@@ -164,7 +164,7 @@ public class viewSS extends JFrame{
 
 // LOAD ITEMS   
     private void loadItems() {
-        List<SanhSu> sanhSu = ss_Service.getAllSS();
+        List<SanhSu> sanhSu = ss_ServiceRemote.getAllSS();
         tableModel.setRowCount(0);
         for(SanhSu sanh_su : sanhSu) {
             Object[] rowData = {sanh_su.getId(), sanh_su.getName(), sanh_su.getSoLuongTon(), sanh_su.getDonGia(), sanh_su.getNhaSanXuat(), sanh_su.getNgayNhapKho()};
@@ -181,7 +181,7 @@ public class viewSS extends JFrame{
         }
 
         int id = (int) tableModel.getValueAt(row, 0);
-        ss_Service.deleteSS(id);
+        ss_ServiceRemote.deleteSS(id);
         loadItems();
     }
 
@@ -204,7 +204,7 @@ public class viewSS extends JFrame{
             clearFieldS();
         } else {
             SanhSu sanhSu = new SanhSu(id, name, soLuongTon, donGia, nhaSanXuat, ngayNhapKho);
-            ss_Service.updateSS(sanhSu);
+            ss_ServiceRemote.updateSS(sanhSu);
 
             loadItems();
             clearFieldS();
@@ -227,7 +227,7 @@ public class viewSS extends JFrame{
             clearFieldS();
         } else {
             SanhSu sanhSu = new SanhSu(id, name, soLuongTon, donGia, nhaSanXuat, ngayNhapKho);
-            ss_Service.updateSS(sanhSu);
+            ss_ServiceRemote.updateSS(sanhSu);
 
             loadItems();
             clearFieldS();

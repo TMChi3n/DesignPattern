@@ -35,11 +35,11 @@ public class viewDM extends JFrame {
     private JTextField baoHanhTextField;
     private JTextField congSuatTextField;
 
-    private DM_Service dm_Service;
+    private DM_Service dm_ServiceRemote;
 
     public viewDM() {
 
-        dm_Service = new DM_ServiceImpl();
+        dm_ServiceRemote = new DM_ServiceImpl();
 
         setTitle("Điện máy");
         setSize(1000, 800);
@@ -147,7 +147,7 @@ public class viewDM extends JFrame {
         }
 
         // Get the ThucPham object from the selected row index
-        DienMay dienMay = dm_Service.getAllDM().get(row);
+        DienMay dienMay = dm_ServiceRemote.getAllDM().get(row);
 
         CommandDM vatDMCommand = new VAT_DM_Cmd(dienMay);
 
@@ -158,7 +158,7 @@ public class viewDM extends JFrame {
 
     // LOAD ITEMS   
     private void loadItems() {
-        List<DienMay> dienMay = dm_Service.getAllDM();
+        List<DienMay> dienMay = dm_ServiceRemote.getAllDM();
         tableModel.setRowCount(0);
         for(DienMay dien_may : dienMay) {
             Object[] rowData = {dien_may.getId(), dien_may.getName(), dien_may.getSoLuongTon(), dien_may.getDonGia(), dien_may.getBaoHanh(), dien_may.getCongSuat()};
@@ -179,7 +179,7 @@ public class viewDM extends JFrame {
             clearFieldS();
         } else {
             DienMay dienMay = new DienMay(id, name, soLuongTon, donGia, baoHanh, congSuat);
-            dm_Service.addDM(dienMay);
+            dm_ServiceRemote.addDM(dienMay);
 
             loadItems();
             clearFieldS();
@@ -207,7 +207,7 @@ public class viewDM extends JFrame {
             clearFieldS();
         } else {
             DienMay dienMay = new DienMay(id, name, soLuongTon, donGia, baoHanh, congSuat);
-            dm_Service.addDM(dienMay);
+            dm_ServiceRemote.addDM(dienMay);
 
             loadItems();
             clearFieldS();
@@ -222,7 +222,7 @@ public class viewDM extends JFrame {
         }
 
         int id = (int) tableModel.getValueAt(row, 0);
-        dm_Service.deleteDM(id);
+        dm_ServiceRemote.deleteDM(id);
         loadItems();
     }
 

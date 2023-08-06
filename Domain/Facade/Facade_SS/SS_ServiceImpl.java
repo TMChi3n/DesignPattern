@@ -7,29 +7,29 @@ import Pesistence.DAO_SS.*;
 
 
 public class SS_ServiceImpl implements SS_Service{
-    private HangSS_DAO ss_DAO;
+    private HangSS_DAO ss_DAORemote;
 
     public SS_ServiceImpl(){
-        ss_DAO = new HangSS_DAOImpl(new HangSS_JdbcGateway());
+        ss_DAORemote = new HangSS_DAOImpl(new HangSS_JdbcGateway());
     }
 
     @Override
     public void addSS(SanhSu sanhSu) {
-        ss_DAO.addSS(sanhSu);
+        ss_DAORemote.addSS(sanhSu);
     }
 
     @Override
     public void updateSS(SanhSu sanhSu) {
-        ss_DAO.updateSS(sanhSu);    
+        ss_DAORemote.updateSS(sanhSu);    
     }
 
     @Override
     public void deleteSS(int idSS) {
-        ss_DAO.deleteSS(idSS);    
+        ss_DAORemote.deleteSS(idSS);    
     }
 
     @Override
     public List<SanhSu> getAllSS() {
-        return ss_DAO.getAllSS();    
+        return ss_DAORemote.getAllSS();    
     }
 }

@@ -39,12 +39,12 @@ public class viewTP extends JFrame{
     private JTextField ngayHetHanTextField;
     private JTextField nhaCungCapTextField;
 
-    private TP_Service tp_Service;
+    private TP_Service tp_ServiceRemote;
 
     public viewTP() {
 
 
-        tp_Service = new TP_ServiceImpl();
+        tp_ServiceRemote = new TP_ServiceImpl();
 
         setTitle("Thực phẩm");
         setSize(1000, 800);
@@ -164,7 +164,7 @@ public class viewTP extends JFrame{
         }
 
         // Get the ThucPham object from the selected row index
-        ThucPham thucPham = tp_Service.getAllTP().get(row);
+        ThucPham thucPham = tp_ServiceRemote.getAllTP().get(row);
 
          // Create the VAT command and set the ThucPham object
         CommandTP vatTPCommand = new VAT_TP_Cmd(thucPham);
@@ -178,7 +178,7 @@ public class viewTP extends JFrame{
 
 // LOAD ITEMS
     private void loadItems() {
-        List<ThucPham> thucPham = tp_Service.getAllTP();
+        List<ThucPham> thucPham = tp_ServiceRemote.getAllTP();
         tableModel.setRowCount(0);
         for(ThucPham thuc_pham : thucPham) {
             Object[] rowData = {thuc_pham.getId(), thuc_pham.getName(), thuc_pham.getSoLuongTon(), thuc_pham.getDonGia(), thuc_pham.getNhaCungCap(), thuc_pham.getNgaySanXuat(), thuc_pham.getNgayHetHan()};
@@ -201,7 +201,7 @@ public class viewTP extends JFrame{
             clearFieldS();
         } else {
             ThucPham thucPham = new ThucPham(id, name, soLuongTon, donGia, ngaySanXuat, ngayHetHan, nhaCungCap);
-            tp_Service.addTP(thucPham);
+            tp_ServiceRemote.addTP(thucPham);
 
             loadItems();
             clearFieldS();
@@ -230,7 +230,7 @@ public class viewTP extends JFrame{
             clearFieldS();
         } else {
             ThucPham thucPham = new ThucPham(id, name, soLuongTon, donGia, ngaySanXuat, ngayHetHan, nhaCungCap);
-            tp_Service.addTP(thucPham);
+            tp_ServiceRemote.addTP(thucPham);
 
             loadItems();
             clearFieldS();
@@ -246,7 +246,7 @@ public class viewTP extends JFrame{
         }
 
         int id = (int) tableModel.getValueAt(row, 0);
-        tp_Service.deleteTP(id);
+        tp_ServiceRemote.deleteTP(id);
 
         loadItems();
     }
