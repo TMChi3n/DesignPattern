@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.security.PublicKey;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,11 +18,13 @@ import javax.swing.table.DefaultTableModel;
 import Domain.Facade.Facade_SS.SS_Service;
 import Domain.Facade.Facade_SS.SS_ServiceImpl;
 import Domain.Model.SanhSu;
+import Domain.Observer.Publisher;
+import Domain.Observer.Subcriber;
 import Presentation.CommandProcessor.Cmd_SS.Cmd_Processor_SS;
 import Presentation.CommandProcessor.Cmd_SS.CommandSS;
 import Presentation.CommandProcessor.Cmd_SS.VAT_SS_Cmd;
 
-public class viewSS extends JFrame{
+public class viewSS extends JFrame implements Subcriber{
 
     private DefaultTableModel tableModel;
     private JTable table;
@@ -39,10 +42,13 @@ public class viewSS extends JFrame{
     private JTextField ngayNhapKhoTextField;
 
     private SS_Service ss_ServiceRemote;
+    private Publisher publisher;
     
     public viewSS() {
 
         ss_ServiceRemote = new SS_ServiceImpl();
+        publisher = new Publisher();
+        publisher.addObserver(this);
 
         setTitle("sành sứ");
         setSize(1000, 800);
@@ -183,6 +189,7 @@ public class viewSS extends JFrame{
         int id = (int) tableModel.getValueAt(row, 0);
         ss_ServiceRemote.deleteSS(id);
         loadItems();
+        publisher.notifyObserver();
     }
 
 // UPDATE ITEMS    
@@ -209,7 +216,7 @@ public class viewSS extends JFrame{
             loadItems();
             clearFieldS();
         }
-
+        publisher.notifyObserver();
         
     }
 
@@ -232,6 +239,8 @@ public class viewSS extends JFrame{
             loadItems();
             clearFieldS();
         }  
+
+        publisher.notifyObserver();
     }
 
 // CONVERT DATE TO STRING    
@@ -294,5 +303,10 @@ public class viewSS extends JFrame{
 
         // Show the results in a dialog box
         JOptionPane.showMessageDialog(this, result.toString());
+    }
+
+    @Override
+    public void update() {
+        loadItems();
     }
 }

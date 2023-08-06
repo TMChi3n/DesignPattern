@@ -14,11 +14,13 @@ import javax.swing.table.DefaultTableModel;
 import Domain.Facade.Facade_DM.DM_Service;
 import Domain.Facade.Facade_DM.DM_ServiceImpl;
 import Domain.Model.DienMay;
+import Domain.Observer.Publisher;
+import Domain.Observer.Subcriber;
 import Presentation.CommandProcessor.Cmd_DM.Cmd_Processor_DM;
 import Presentation.CommandProcessor.Cmd_DM.CommandDM;
 import Presentation.CommandProcessor.Cmd_DM.VAT_DM_Cmd;
 
-public class viewDM extends JFrame {
+public class viewDM extends JFrame implements Subcriber{
 
     private DefaultTableModel tableModel;
     private JTable table;
@@ -36,10 +38,13 @@ public class viewDM extends JFrame {
     private JTextField congSuatTextField;
 
     private DM_Service dm_ServiceRemote;
+    private Publisher publisher;
 
     public viewDM() {
 
         dm_ServiceRemote = new DM_ServiceImpl();
+        publisher = new Publisher();
+        publisher.addObserver(this);
 
         setTitle("Điện máy");
         setSize(1000, 800);
@@ -184,6 +189,8 @@ public class viewDM extends JFrame {
             loadItems();
             clearFieldS();
         }
+
+        publisher.notifyObserver();
         
             
     }
@@ -212,6 +219,8 @@ public class viewDM extends JFrame {
             loadItems();
             clearFieldS();
         }
+
+        publisher.notifyObserver();
     }
 
     private void deleteItems() {
@@ -224,6 +233,7 @@ public class viewDM extends JFrame {
         int id = (int) tableModel.getValueAt(row, 0);
         dm_ServiceRemote.deleteDM(id);
         loadItems();
+        publisher.notifyObserver();
     }
 
 // CLEAR FIELDS    
@@ -266,5 +276,10 @@ public class viewDM extends JFrame {
 
         // Show the results in a dialog box
         JOptionPane.showMessageDialog(this, result.toString());
+    }
+
+    @Override
+    public void update() {
+        loadItems();
     }
 }

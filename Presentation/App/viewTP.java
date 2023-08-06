@@ -16,11 +16,13 @@ import javax.swing.table.DefaultTableModel;
 
 import Domain.Facade.Facade_TP.*;
 import Domain.Model.ThucPham;
+import Domain.Observer.Publisher;
+import Domain.Observer.Subcriber;
 import Presentation.CommandProcessor.Cmd_TP.Cmd_Processor_TP;
 import Presentation.CommandProcessor.Cmd_TP.CommandTP;
 import Presentation.CommandProcessor.Cmd_TP.VAT_TP_Cmd;
 
-public class viewTP extends JFrame{
+public class viewTP extends JFrame implements Subcriber{
 
     private DefaultTableModel tableModel;
     private JTable table;
@@ -40,11 +42,15 @@ public class viewTP extends JFrame{
     private JTextField nhaCungCapTextField;
 
     private TP_Service tp_ServiceRemote;
+    private Publisher publisher;
 
     public viewTP() {
 
 
         tp_ServiceRemote = new TP_ServiceImpl();
+        publisher = new Publisher();
+        publisher.addObserver(this);
+        
 
         setTitle("Thực phẩm");
         setSize(1000, 800);
@@ -183,6 +189,7 @@ public class viewTP extends JFrame{
         for(ThucPham thuc_pham : thucPham) {
             Object[] rowData = {thuc_pham.getId(), thuc_pham.getName(), thuc_pham.getSoLuongTon(), thuc_pham.getDonGia(), thuc_pham.getNhaCungCap(), thuc_pham.getNgaySanXuat(), thuc_pham.getNgayHetHan()};
             tableModel.addRow(rowData);
+            
         }
     }
 
@@ -207,6 +214,7 @@ public class viewTP extends JFrame{
             clearFieldS();
         }  
 
+        publisher.notifyObserver();
         
     }
 
@@ -235,6 +243,8 @@ public class viewTP extends JFrame{
             loadItems();
             clearFieldS();
         }
+        publisher.notifyObserver();
+
     }
 
 // DELETE ITEMS
@@ -249,43 +259,47 @@ public class viewTP extends JFrame{
         tp_ServiceRemote.deleteTP(id);
 
         loadItems();
+        publisher.notifyObserver();
+
     }
 
 // FIND ITEMS BY WEEK    
     private void findItems() {
         int selectedRow = table.getSelectedRow();
-    if (selectedRow == -1) {
-        JOptionPane.showMessageDialog(this, "Vui lòng chọn một dòng trong bảng để tìm kiếm.");
-        return;
-    }
-
-    try {
-        // Get the selected ThucPham object from the table row
-        int id = (int) tableModel.getValueAt(selectedRow, 0);
-        String name = (String) tableModel.getValueAt(selectedRow, 1);
-        int soLuongTon = (int) tableModel.getValueAt(selectedRow, 2);
-        double donGia = (double) tableModel.getValueAt(selectedRow, 3);
-        Date ngaySanXuat = (Date) tableModel.getValueAt(selectedRow, 5);
-        Date ngayHetHan = (Date) tableModel.getValueAt(selectedRow, 6);
-        String nhaCungCap = (String) tableModel.getValueAt(selectedRow, 4);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        String ngaySanXuatString = dateFormat.format(ngaySanXuat);
-        String ngayHetHanString = dateFormat.format(ngayHetHan);
-
-        // Calculate the difference in days between the expiration date and the current date
-        Date currentDate = new Date();
-        long differenceInDays = (ngayHetHan.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
-
-        if (differenceInDays < 7) {
-            JOptionPane.showMessageDialog(this, "Sản phẩm " + name + " còn hạn sử dụng đến ngày " + ngayHetHanString);
-        } else {
-            JOptionPane.showMessageDialog(this, "Sản phẩm " + name + " đã hết hạn từ ngày " + ngayHetHanString);
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một dòng trong bảng để tìm kiếm.");
+            return;
         }
-    } catch (NumberFormatException ex) {
-        // Handle the case when the input is not a valid number
-        JOptionPane.showMessageDialog(this, "Vui lòng nhập the đúng định dạng yyyy/MM/dd");
-    }
+
+        try {
+            // Get the selected ThucPham object from the table row
+            int id = (int) tableModel.getValueAt(selectedRow, 0);
+            String name = (String) tableModel.getValueAt(selectedRow, 1);
+            int soLuongTon = (int) tableModel.getValueAt(selectedRow, 2);
+            double donGia = (double) tableModel.getValueAt(selectedRow, 3);
+            Date ngaySanXuat = (Date) tableModel.getValueAt(selectedRow, 5);
+            Date ngayHetHan = (Date) tableModel.getValueAt(selectedRow, 6);
+            String nhaCungCap = (String) tableModel.getValueAt(selectedRow, 4);
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            String ngaySanXuatString = dateFormat.format(ngaySanXuat);
+            String ngayHetHanString = dateFormat.format(ngayHetHan);
+
+            // Calculate the difference in days between the expiration date and the current date
+            Date currentDate = new Date();
+            long differenceInDays = (ngayHetHan.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
+
+            if (differenceInDays < 7) {
+                JOptionPane.showMessageDialog(this, "Sản phẩm " + name + " còn hạn sử dụng đến ngày " + ngayHetHanString);
+            } else {
+                JOptionPane.showMessageDialog(this, "Sản phẩm " + name + " đã hết hạn từ ngày " + ngayHetHanString);
+            }
+        } catch (NumberFormatException ex) {
+            
+        }
+
+        publisher.notifyObserver();
+
     }
 
 
@@ -350,6 +364,11 @@ public class viewTP extends JFrame{
 
         // Hiển thị kết quả trong hộp thoại
         JOptionPane.showMessageDialog(this, result.toString());
+    }
+
+    @Override
+    public void update() {
+        loadItems();
     }
 
 }
