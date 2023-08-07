@@ -8,8 +8,8 @@ public class HangDM_DAOImpl implements HangDM_DAO{
 
     private HangDM_Gateway dm_GatewayRemote;
 
-    public HangDM_DAOImpl(HangDM_Gateway dm_Gateway){
-        this.dm_GatewayRemote = dm_Gateway;
+    public HangDM_DAOImpl(HangDM_Gateway dm_GatewayRemote){
+        this.dm_GatewayRemote = dm_GatewayRemote;
     }
 
     @Override

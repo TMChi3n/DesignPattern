@@ -42,16 +42,14 @@ public class viewTP extends JFrame implements Subcriber{
     private JTextField nhaCungCapTextField;
 
     private TP_Service tp_ServiceRemote;
-    private Publisher publisher;
+    private Publisher publisherRemote;
 
     public viewTP() {
 
-
         tp_ServiceRemote = new TP_ServiceImpl();
-        publisher = new Publisher();
-        publisher.addObserver(this);
+        publisherRemote = new Publisher();
+        publisherRemote.addObserver(this);
         
-
         setTitle("Thực phẩm");
         setSize(1000, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -214,7 +212,7 @@ public class viewTP extends JFrame implements Subcriber{
             clearFieldS();
         }  
 
-        publisher.notifyObserver();
+        publisherRemote.notifyObserver();
         
     }
 
@@ -243,7 +241,7 @@ public class viewTP extends JFrame implements Subcriber{
             loadItems();
             clearFieldS();
         }
-        publisher.notifyObserver();
+        publisherRemote.notifyObserver();
 
     }
 
@@ -259,7 +257,7 @@ public class viewTP extends JFrame implements Subcriber{
         tp_ServiceRemote.deleteTP(id);
 
         loadItems();
-        publisher.notifyObserver();
+        publisherRemote.notifyObserver();
 
     }
 
@@ -298,7 +296,7 @@ public class viewTP extends JFrame implements Subcriber{
             
         }
 
-        publisher.notifyObserver();
+        publisherRemote.notifyObserver();
 
     }
 

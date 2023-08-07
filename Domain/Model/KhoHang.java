@@ -16,11 +16,6 @@ public class KhoHang extends Publisher{
         this.donGia = donGia;
     }
 
-    @Override
-    public String toString() {
-        return "Mã hàng: " + id + ", Tên hàng: " + name + "Số lượng tồn: " + soLuongTon + "Đơn giá: " + donGia;
-    }
-
     public double getDonGia() {
         return donGia;
     }
@@ -54,7 +49,6 @@ public class KhoHang extends Publisher{
     }
 
     public double VAT(){
-        notifyObserver();
         return 0;
     }
 }

@@ -23,10 +23,8 @@ public class HangTP_JdbcGateway implements HangTP_Gateway {
         String password = "123456789";
         try {
             connection = DriverManager.getConnection(db, username, password);
-            System.out.println("Connection");
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Failed connection");
         }
     }
 

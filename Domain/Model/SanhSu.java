@@ -13,11 +13,6 @@ public class SanhSu extends KhoHang{
     }
 
     @Override
-    public String toString() {
-        return "Nhà sản xuất: " + nhaSanXuat + "Ngày nhập kho: " + ngayNhapKho;
-    }
-
-    @Override
     public double VAT(){
         double vat;
         vat = donGia * 0.1;

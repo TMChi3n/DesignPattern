@@ -15,11 +15,6 @@ public class ThucPham extends KhoHang{
     }
 
     @Override
-    public String toString() {
-        return "Ngày sản xuất: " + ngaySanXuat + "Ngày hết han: " + ngayHetHan + "Nhà cung cấp: " + nhaCungCap;
-    }
-
-    @Override
     public double VAT(){
         double vat;
         vat = donGia * 0.05;

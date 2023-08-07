@@ -9,8 +9,8 @@ public class HangTP_DAOImpl implements HangTP_DAO{
 
     private HangTP_Gateway tp_GatewayRemote;
 
-    public HangTP_DAOImpl(HangTP_Gateway tp_Gateway){
-        this.tp_GatewayRemote = tp_Gateway;
+    public HangTP_DAOImpl(HangTP_Gateway tp_GatewayRemote){
+        this.tp_GatewayRemote = tp_GatewayRemote;
     }
 
     @Override

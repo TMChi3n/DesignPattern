@@ -42,13 +42,13 @@ public class viewSS extends JFrame implements Subcriber{
     private JTextField ngayNhapKhoTextField;
 
     private SS_Service ss_ServiceRemote;
-    private Publisher publisher;
+    private Publisher publisherRemote;
     
     public viewSS() {
 
         ss_ServiceRemote = new SS_ServiceImpl();
-        publisher = new Publisher();
-        publisher.addObserver(this);
+        publisherRemote = new Publisher();
+        publisherRemote.addObserver(this);
 
         setTitle("sành sứ");
         setSize(1000, 800);
@@ -189,7 +189,7 @@ public class viewSS extends JFrame implements Subcriber{
         int id = (int) tableModel.getValueAt(row, 0);
         ss_ServiceRemote.deleteSS(id);
         loadItems();
-        publisher.notifyObserver();
+        publisherRemote.notifyObserver();
     }
 
 // UPDATE ITEMS    
@@ -216,7 +216,7 @@ public class viewSS extends JFrame implements Subcriber{
             loadItems();
             clearFieldS();
         }
-        publisher.notifyObserver();
+        publisherRemote.notifyObserver();
         
     }
 
@@ -240,7 +240,7 @@ public class viewSS extends JFrame implements Subcriber{
             clearFieldS();
         }  
 
-        publisher.notifyObserver();
+        publisherRemote.notifyObserver();
     }
 
 // CONVERT DATE TO STRING    

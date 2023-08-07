@@ -38,13 +38,13 @@ public class viewDM extends JFrame implements Subcriber{
     private JTextField congSuatTextField;
 
     private DM_Service dm_ServiceRemote;
-    private Publisher publisher;
+    private Publisher publisherRemote;
 
     public viewDM() {
 
         dm_ServiceRemote = new DM_ServiceImpl();
-        publisher = new Publisher();
-        publisher.addObserver(this);
+        publisherRemote = new Publisher();
+        publisherRemote.addObserver(this);
 
         setTitle("Điện máy");
         setSize(1000, 800);
@@ -190,7 +190,7 @@ public class viewDM extends JFrame implements Subcriber{
             clearFieldS();
         }
 
-        publisher.notifyObserver();
+        publisherRemote.notifyObserver();
         
             
     }
@@ -220,7 +220,7 @@ public class viewDM extends JFrame implements Subcriber{
             clearFieldS();
         }
 
-        publisher.notifyObserver();
+        publisherRemote.notifyObserver();
     }
 
     private void deleteItems() {
@@ -233,7 +233,7 @@ public class viewDM extends JFrame implements Subcriber{
         int id = (int) tableModel.getValueAt(row, 0);
         dm_ServiceRemote.deleteDM(id);
         loadItems();
-        publisher.notifyObserver();
+        publisherRemote.notifyObserver();
     }
 
 // CLEAR FIELDS    

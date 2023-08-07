@@ -11,11 +11,6 @@ public class DienMay extends KhoHang{
     }
 
     @Override
-    public String toString() {
-        return "Hạn bảo hành: " + baoHanh + "Công suất: " + congSuat;
-    }
-
-    @Override
     public double VAT(){
         double vat;
         vat = donGia * 0.1;

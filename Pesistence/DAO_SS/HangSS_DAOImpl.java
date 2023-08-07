@@ -8,8 +8,8 @@ public class HangSS_DAOImpl implements HangSS_DAO{
 
     private HangSS_Gateway ss_GatewayRemote;
 
-    public HangSS_DAOImpl(HangSS_Gateway ss_Gateway){
-        this.ss_GatewayRemote = ss_Gateway;
+    public HangSS_DAOImpl(HangSS_Gateway ss_GatewayRemote){
+        this.ss_GatewayRemote = ss_GatewayRemote;
     }
 
     @Override
