@@ -1,4 +1,4 @@
-package Pesistence.DAO_SS;
+package Persistence.DAO_SS;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -222,6 +222,7 @@ public class viewSS extends JFrame implements Subcriber{
                 loadItems();
                 clearFieldS();
             }
+            clearFieldS();
 
         }
  

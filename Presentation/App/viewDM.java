@@ -223,6 +223,7 @@ public class viewDM extends JFrame implements Subcriber{
                 clearFieldS();
                 
             }
+            clearFieldS();
         }
         publisherRemote.notifyObserver();
     }

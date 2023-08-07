@@ -3,9 +3,9 @@ package Domain.Facade.Facade_DM;
 import java.util.List;
 
 import Domain.Model.DienMay;
-import Pesistence.DAO_DM.HangDM_DAO;
-import Pesistence.DAO_DM.HangDM_DAOImpl;
-import Pesistence.DAO_DM.HangDM_JdbcGateway;
+import Persistence.DAO_DM.HangDM_DAO;
+import Persistence.DAO_DM.HangDM_DAOImpl;
+import Persistence.DAO_DM.HangDM_JdbcGateway;
 
 public class DM_ServiceImpl implements DM_Service{
 

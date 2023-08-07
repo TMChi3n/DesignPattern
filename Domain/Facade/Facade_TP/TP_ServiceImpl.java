@@ -4,9 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import Domain.Model.ThucPham;
-import Pesistence.DAO_TP.HangTP_DAO;
-import Pesistence.DAO_TP.HangTP_JdbcGateway;
-import Pesistence.DAO_TP.HangTP_DAOImpl;
+import Persistence.DAO_TP.HangTP_DAO;
+import Persistence.DAO_TP.HangTP_DAOImpl;
+import Persistence.DAO_TP.HangTP_JdbcGateway;
 
 public class TP_ServiceImpl implements TP_Service{
 

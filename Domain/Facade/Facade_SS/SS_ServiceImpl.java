@@ -3,7 +3,7 @@ package Domain.Facade.Facade_SS;
 import java.util.List;
 
 import Domain.Model.SanhSu;
-import Pesistence.DAO_SS.*;
+import Persistence.DAO_SS.*;
 
 
 public class SS_ServiceImpl implements SS_Service{

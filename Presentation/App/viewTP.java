@@ -247,6 +247,7 @@ public class viewTP extends JFrame implements Subcriber {
                 loadItems();
                 clearFieldS();
             }
+            clearFieldS();
         }    
         
         publisherRemote.notifyObserver();
@@ -295,14 +296,13 @@ public class viewTP extends JFrame implements Subcriber {
 
             // Calculate the difference in days between the expiration date and the current
             // date
-            Date currentDate = new Date();
-            long differenceInDays = (ngayHetHan.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
+            long differenceInDays = (ngayHetHan.getTime() - ngaySanXuat.getTime()) / (1000 * 60 * 60 * 24);
 
             if (differenceInDays < 7) {
                 JOptionPane.showMessageDialog(this,
-                        "Sản phẩm " + name + " còn hạn sử dụng đến ngày " + ngayHetHanString);
+                        "Sản phẩm " + name + " còn hạn sử dụng từ ngày " + ngaySanXuatString + " đến ngày " + ngayHetHanString);
             } else {
-                JOptionPane.showMessageDialog(this, "Sản phẩm " + name + " đã hết hạn từ ngày " + ngayHetHanString);
+                JOptionPane.showMessageDialog(this, "Không tìm tháy sản phẩm này");
             }
         } catch (NumberFormatException ex) {
 

@@ -1,4 +1,4 @@
-package Pesistence.DAO_DM;
+package Persistence.DAO_DM;
 
 import java.sql.Statement;
 import java.sql.Connection;
