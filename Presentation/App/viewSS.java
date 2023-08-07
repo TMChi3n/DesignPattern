@@ -50,7 +50,7 @@ public class viewSS extends JFrame implements Subcriber{
         publisherRemote = new Publisher();
         publisherRemote.addObserver(this);
 
-        setTitle("sành sứ");
+        setTitle("Sành sứ");
         setSize(1000, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
