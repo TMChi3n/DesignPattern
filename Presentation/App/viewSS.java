@@ -156,10 +156,10 @@ public class viewSS extends JFrame implements Subcriber{
         }
 
         // Get the ThucPham object from the selected row index
-        SanhSu sanhSu = ss_ServiceRemote.getAllSS().get(row);
+        SanhSu sanhSuRemote = ss_ServiceRemote.getAllSS().get(row);
 
          // Create the VAT command and set the ThucPham object
-        CommandSS vatSSCommand = new VAT_SS_Cmd(sanhSu);
+        CommandSS vatSSCommand = new VAT_SS_Cmd(sanhSuRemote);
 
         // Create the command processor
         Cmd_Processor_SS cmdProcessor = new Cmd_Processor_SS();
@@ -170,9 +170,9 @@ public class viewSS extends JFrame implements Subcriber{
 
 // LOAD ITEMS   
     private void loadItems() {
-        List<SanhSu> sanhSu = ss_ServiceRemote.getAllSS();
+        List<SanhSu> sanhSuRemote = ss_ServiceRemote.getAllSS();
         tableModel.setRowCount(0);
-        for(SanhSu sanh_su : sanhSu) {
+        for(SanhSu sanh_su : sanhSuRemote) {
             Object[] rowData = {sanh_su.getId(), sanh_su.getName(), sanh_su.getSoLuongTon(), sanh_su.getDonGia(), sanh_su.getNhaSanXuat(), sanh_su.getNgayNhapKho()};
             tableModel.addRow(rowData);
         }
@@ -186,10 +186,13 @@ public class viewSS extends JFrame implements Subcriber{
             return;
         }
 
-        int id = (int) tableModel.getValueAt(row, 0);
-        ss_ServiceRemote.deleteSS(id);
-        loadItems();
-        publisherRemote.notifyObserver();
+        int result = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa hàng?", "Xác nhận xóa hàng", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            int id = (int) tableModel.getValueAt(row, 0);
+            ss_ServiceRemote.deleteSS(id);
+            loadItems();
+        }
+            publisherRemote.notifyObserver();
     }
 
 // UPDATE ITEMS    
@@ -197,25 +200,31 @@ public class viewSS extends JFrame implements Subcriber{
         int row = table.getSelectedRow();
         if (row == -1) {
             JOptionPane.showMessageDialog(this, "Chọn hàng có trên bảng để cập nhật");
+
         }
 
-        int id = Integer.parseInt(idTextField.getText());
-        String name = tenHangTextField.getText();
-        int soLuongTon = Integer.parseInt(soLuongTonTextField.getText());
-        double donGia = Double.parseDouble(donGiaTextField.getText());
-        String nhaSanXuat = nhaSanXuatTextField.getText();
-        Date ngayNhapKho = parseDate(ngayNhapKhoTextField.getText());
+        int result = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn cập nhật hàng?", "Xác nhận cập nhật hàng", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            int id = Integer.parseInt(idTextField.getText());
+            String name = tenHangTextField.getText();
+            int soLuongTon = Integer.parseInt(soLuongTonTextField.getText());
+            double donGia = Double.parseDouble(donGiaTextField.getText());
+            String nhaSanXuat = nhaSanXuatTextField.getText();
+            Date ngayNhapKho = parseDate(ngayNhapKhoTextField.getText());
 
-        if (soLuongTon < 0 || donGia <= 0) {
-            JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
-            clearFieldS();
-        } else {
-            SanhSu sanhSu = new SanhSu(id, name, soLuongTon, donGia, nhaSanXuat, ngayNhapKho);
-            ss_ServiceRemote.updateSS(sanhSu);
+            if (soLuongTon < 0 || donGia <= 0) {
+                JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
+                clearFieldS();
+            } else {
+                SanhSu sanhSuRemote = new SanhSu(id, name, soLuongTon, donGia, nhaSanXuat, ngayNhapKho);
+                ss_ServiceRemote.updateSS(sanhSuRemote);
 
-            loadItems();
-            clearFieldS();
+                loadItems();
+                clearFieldS();
+            }
+
         }
+ 
         publisherRemote.notifyObserver();
         
     }
@@ -233,8 +242,8 @@ public class viewSS extends JFrame implements Subcriber{
             JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
             clearFieldS();
         } else {
-            SanhSu sanhSu = new SanhSu(id, name, soLuongTon, donGia, nhaSanXuat, ngayNhapKho);
-            ss_ServiceRemote.updateSS(sanhSu);
+            SanhSu sanhSuRemote = new SanhSu(id, name, soLuongTon, donGia, nhaSanXuat, ngayNhapKho);
+            ss_ServiceRemote.addSS(sanhSuRemote);
 
             loadItems();
             clearFieldS();

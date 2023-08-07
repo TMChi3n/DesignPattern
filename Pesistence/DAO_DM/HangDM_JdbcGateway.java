@@ -46,7 +46,7 @@ public class HangDM_JdbcGateway implements HangDM_Gateway{
 
     @Override
     public void updateDM(DienMay dienMay) {
-        String sql = "UPDATE DienMay SET id = ?, name = ?, quantityOnHand = ?, unitPrice = ? warrantyMonthsDM = ?, powerKwDM = ? WHERE id = ?";
+        String sql = "UPDATE DienMay SET id = ?, name = ?, quantityOnHand = ?, unitPrice = ?, warrantyMonthsDM = ?, powerKwDM = ? WHERE id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, dienMay.getId());

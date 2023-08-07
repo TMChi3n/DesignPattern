@@ -152,9 +152,9 @@ public class viewDM extends JFrame implements Subcriber{
         }
 
         // Get the ThucPham object from the selected row index
-        DienMay dienMay = dm_ServiceRemote.getAllDM().get(row);
+        DienMay dienMayRemote = dm_ServiceRemote.getAllDM().get(row);
 
-        CommandDM vatDMCommand = new VAT_DM_Cmd(dienMay);
+        CommandDM vatDMCommand = new VAT_DM_Cmd(dienMayRemote);
 
         Cmd_Processor_DM cmdProcessor = new Cmd_Processor_DM();
 
@@ -163,9 +163,9 @@ public class viewDM extends JFrame implements Subcriber{
 
     // LOAD ITEMS   
     private void loadItems() {
-        List<DienMay> dienMay = dm_ServiceRemote.getAllDM();
+        List<DienMay> dienMayRemote = dm_ServiceRemote.getAllDM();
         tableModel.setRowCount(0);
-        for(DienMay dien_may : dienMay) {
+        for(DienMay dien_may : dienMayRemote) {
             Object[] rowData = {dien_may.getId(), dien_may.getName(), dien_may.getSoLuongTon(), dien_may.getDonGia(), dien_may.getBaoHanh(), dien_may.getCongSuat()};
             tableModel.addRow(rowData);
         }
@@ -183,8 +183,8 @@ public class viewDM extends JFrame implements Subcriber{
             JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
             clearFieldS();
         } else {
-            DienMay dienMay = new DienMay(id, name, soLuongTon, donGia, baoHanh, congSuat);
-            dm_ServiceRemote.addDM(dienMay);
+            DienMay dienMayRemote = new DienMay(id, name, soLuongTon, donGia, baoHanh, congSuat);
+            dm_ServiceRemote.addDM(dienMayRemote);
 
             loadItems();
             clearFieldS();
@@ -200,28 +200,33 @@ public class viewDM extends JFrame implements Subcriber{
         int row = table.getSelectedRow();
         if (row == -1) {
             JOptionPane.showMessageDialog(this, "Chọn hàng trên bảng để cập nhật");
+            return;
         }
-
-        int id = Integer.parseInt(idTextField.getText());
-        String name = tenHangTextField.getText();
-        int soLuongTon = Integer.parseInt(soLuongTonTextField.getText());
-        double donGia = Double.parseDouble(donGiaTextField.getText());
-        int baoHanh = Integer.parseInt(baoHanhTextField.getText());
-        double congSuat = Double.parseDouble(congSuatTextField.getText());
-
-        if (soLuongTon < 0 || donGia <= 0 || baoHanh <= 0 || congSuat < 0) {
-            JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
-            clearFieldS();
-        } else {
-            DienMay dienMay = new DienMay(id, name, soLuongTon, donGia, baoHanh, congSuat);
-            dm_ServiceRemote.addDM(dienMay);
-
-            loadItems();
-            clearFieldS();
+    
+        int result = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn cập nhật hàng?", "Xác nhận cập nhật hàng", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            int id = Integer.parseInt(idTextField.getText());
+            String name = tenHangTextField.getText();
+            int soLuongTon = Integer.parseInt(soLuongTonTextField.getText());
+            double donGia = Double.parseDouble(donGiaTextField.getText());
+            int baoHanh = Integer.parseInt(baoHanhTextField.getText());
+            double congSuat = Double.parseDouble(congSuatTextField.getText());
+    
+            if (soLuongTon < 0 || donGia <= 0 || baoHanh <= 0 || congSuat < 0) {
+                JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
+                clearFieldS();
+            } else {
+                DienMay dienMay = new DienMay(id, name, soLuongTon, donGia, baoHanh, congSuat);
+                dm_ServiceRemote.updateDM(dienMay);
+    
+                loadItems();
+                clearFieldS();
+                
+            }
         }
-
         publisherRemote.notifyObserver();
     }
+    
 
     private void deleteItems() {
         int row = table.getSelectedRow();
@@ -230,9 +235,12 @@ public class viewDM extends JFrame implements Subcriber{
             return;
         }
 
-        int id = (int) tableModel.getValueAt(row, 0);
-        dm_ServiceRemote.deleteDM(id);
-        loadItems();
+        int result = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa hàng?", "Xác nhận xóa hàng", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            int id = (int) tableModel.getValueAt(row, 0);
+            dm_ServiceRemote.deleteDM(id);
+            loadItems();
+        }
         publisherRemote.notifyObserver();
     }
 

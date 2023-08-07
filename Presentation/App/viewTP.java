@@ -22,7 +22,7 @@ import Presentation.CommandProcessor.Cmd_TP.Cmd_Processor_TP;
 import Presentation.CommandProcessor.Cmd_TP.CommandTP;
 import Presentation.CommandProcessor.Cmd_TP.VAT_TP_Cmd;
 
-public class viewTP extends JFrame implements Subcriber{
+public class viewTP extends JFrame implements Subcriber {
 
     private DefaultTableModel tableModel;
     private JTable table;
@@ -43,13 +43,15 @@ public class viewTP extends JFrame implements Subcriber{
 
     private TP_Service tp_ServiceRemote;
     private Publisher publisherRemote;
+    private ThucPham thucPhamRemote;
+    private Cmd_Processor_TP cmdProcessorRemote;
 
     public viewTP() {
 
         tp_ServiceRemote = new TP_ServiceImpl();
         publisherRemote = new Publisher();
         publisherRemote.addObserver(this);
-        
+
         setTitle("Thực phẩm");
         setSize(1000, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -159,7 +161,7 @@ public class viewTP extends JFrame implements Subcriber{
         loadItems();
     }
 
-// VAT
+    // VAT
     private void VAT_Items() {
         int row = table.getSelectedRow();
         if (row == -1) {
@@ -168,30 +170,32 @@ public class viewTP extends JFrame implements Subcriber{
         }
 
         // Get the ThucPham object from the selected row index
-        ThucPham thucPham = tp_ServiceRemote.getAllTP().get(row);
+        ThucPham thucPhamRemote = tp_ServiceRemote.getAllTP().get(row);
 
-         // Create the VAT command and set the ThucPham object
-        CommandTP vatTPCommand = new VAT_TP_Cmd(thucPham);
+        // Create the VAT command and set the ThucPham object
+        CommandTP vatTPCommand = new VAT_TP_Cmd(thucPhamRemote);
 
         // Create the command processor
-        Cmd_Processor_TP cmdProcessor = new Cmd_Processor_TP();
+        Cmd_Processor_TP cmdProcessorRemote = new Cmd_Processor_TP();
 
         // Execute the command
-        cmdProcessor.execute(vatTPCommand);
+        cmdProcessorRemote.execute(vatTPCommand);
     }
 
-// LOAD ITEMS
+    // LOAD ITEMS
     private void loadItems() {
-        List<ThucPham> thucPham = tp_ServiceRemote.getAllTP();
+        List<ThucPham> thucPhamRemote = tp_ServiceRemote.getAllTP();
         tableModel.setRowCount(0);
-        for(ThucPham thuc_pham : thucPham) {
-            Object[] rowData = {thuc_pham.getId(), thuc_pham.getName(), thuc_pham.getSoLuongTon(), thuc_pham.getDonGia(), thuc_pham.getNhaCungCap(), thuc_pham.getNgaySanXuat(), thuc_pham.getNgayHetHan()};
+        for (ThucPham thuc_pham : thucPhamRemote) {
+            Object[] rowData = { thuc_pham.getId(), thuc_pham.getName(), thuc_pham.getSoLuongTon(),
+                    thuc_pham.getDonGia(), thuc_pham.getNhaCungCap(), thuc_pham.getNgaySanXuat(),
+                    thuc_pham.getNgayHetHan() };
             tableModel.addRow(rowData);
-            
+
         }
     }
 
-// ADD ITEMS
+    // ADD ITEMS
     private void addItems() {
         int id = Integer.parseInt(idTextField.getText());
         String name = tenHangTextField.getText();
@@ -205,63 +209,69 @@ public class viewTP extends JFrame implements Subcriber{
             JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
             clearFieldS();
         } else {
-            ThucPham thucPham = new ThucPham(id, name, soLuongTon, donGia, ngaySanXuat, ngayHetHan, nhaCungCap);
-            tp_ServiceRemote.addTP(thucPham);
+            ThucPham thucPhamRemote = new ThucPham(id, name, soLuongTon, donGia, ngaySanXuat, ngayHetHan, nhaCungCap);
+            tp_ServiceRemote.addTP(thucPhamRemote);
 
             loadItems();
             clearFieldS();
-        }  
+        }
 
         publisherRemote.notifyObserver();
-        
+
     }
 
-// UPDATE ITEMS    
+    // UPDATE ITEMS
     private void updateItems() {
         int row = table.getSelectedRow();
         if (row == -1) {
             JOptionPane.showMessageDialog(this, "Chọn thực phẩm trên bảng để cập nhật");
         }
 
-        int id = Integer.parseInt(idTextField.getText());
-        String name = tenHangTextField.getText();
-        int soLuongTon = Integer.parseInt(soLuongTonTextField.getText());
-        double donGia = Double.parseDouble(donGiaTextField.getText());
-        Date ngaySanXuat = parseDate(ngaySanXuatTextField.getText());
-        Date ngayHetHan = parseDate(ngayHetHanTextField.getText());
-        String nhaCungCap = nhaCungCapTextField.getText();
+        int result = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn cập nhật hàng?", "Xác nhận cập nhật hàng", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            int id = Integer.parseInt(idTextField.getText());
+            String name = tenHangTextField.getText();
+            int soLuongTon = Integer.parseInt(soLuongTonTextField.getText());
+            double donGia = Double.parseDouble(donGiaTextField.getText());
+            Date ngaySanXuat = parseDate(ngaySanXuatTextField.getText());
+            Date ngayHetHan = parseDate(ngayHetHanTextField.getText());
+            String nhaCungCap = nhaCungCapTextField.getText();
 
-        if (soLuongTon < 0 || donGia <= 0) {
-            JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
-            clearFieldS();
-        } else {
-            ThucPham thucPham = new ThucPham(id, name, soLuongTon, donGia, ngaySanXuat, ngayHetHan, nhaCungCap);
-            tp_ServiceRemote.addTP(thucPham);
+            if (soLuongTon < 0 || donGia <= 0) {
+                JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
+                clearFieldS();
+            } else {
+                ThucPham thucPhamRemote = new ThucPham(id, name, soLuongTon, donGia, ngaySanXuat, ngayHetHan, nhaCungCap);
+                tp_ServiceRemote.updateTP(thucPhamRemote);
 
-            loadItems();
-            clearFieldS();
-        }
+                loadItems();
+                clearFieldS();
+            }
+        }    
+        
         publisherRemote.notifyObserver();
 
     }
 
-// DELETE ITEMS
+    // DELETE ITEMS
     private void deleteItems() {
         int row = table.getSelectedRow();
-        if(row == -1) {
+        if (row == -1) {
             JOptionPane.showMessageDialog(this, "Chọn thực phẩm trên bảng để xóa");
             return;
         }
 
-        int id = (int) tableModel.getValueAt(row, 0);
-        tp_ServiceRemote.deleteTP(id);
-
-        loadItems();
+        int result = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa hàng?", "Xác nhận xóa hàng", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            int id = (int) tableModel.getValueAt(row, 0);
+            tp_ServiceRemote.deleteTP(id);
+            loadItems();
+        }
         publisherRemote.notifyObserver();
 
     }
 
-// FIND ITEMS BY WEEK    
+    // FIND ITEMS BY WEEK
     private void findItems() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow == -1) {
@@ -283,27 +293,26 @@ public class viewTP extends JFrame implements Subcriber{
             String ngaySanXuatString = dateFormat.format(ngaySanXuat);
             String ngayHetHanString = dateFormat.format(ngayHetHan);
 
-            // Calculate the difference in days between the expiration date and the current date
+            // Calculate the difference in days between the expiration date and the current
+            // date
             Date currentDate = new Date();
             long differenceInDays = (ngayHetHan.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
 
             if (differenceInDays < 7) {
-                JOptionPane.showMessageDialog(this, "Sản phẩm " + name + " còn hạn sử dụng đến ngày " + ngayHetHanString);
+                JOptionPane.showMessageDialog(this,
+                        "Sản phẩm " + name + " còn hạn sử dụng đến ngày " + ngayHetHanString);
             } else {
                 JOptionPane.showMessageDialog(this, "Sản phẩm " + name + " đã hết hạn từ ngày " + ngayHetHanString);
             }
         } catch (NumberFormatException ex) {
-            
+
         }
 
         publisherRemote.notifyObserver();
 
     }
 
-
-
-
-// CONVERT DATE     
+    // CONVERT DATE
     private Date parseDate(String dateString) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
@@ -319,8 +328,7 @@ public class viewTP extends JFrame implements Subcriber{
         return null; // Return null if the parsing fails
     }
 
-
-// CLEAR FIELDS WHEN ADD SUCCESS    
+    // CLEAR FIELDS WHEN ADD SUCCESS
     private void clearFieldS() {
         idTextField.setText("");
         tenHangTextField.setText("");
@@ -331,7 +339,7 @@ public class viewTP extends JFrame implements Subcriber{
         nhaCungCapTextField.setText("");
     }
 
-// BACK VIEW PAGE    
+    // BACK VIEW PAGE
     private void backPage() {
         JFrame viewPage = new ManagementApp();
         viewPage.setLocationRelativeTo(null);
@@ -341,7 +349,7 @@ public class viewTP extends JFrame implements Subcriber{
         dispose();
     }
 
-    private void sumTP(){
+    private void sumTP() {
         Map<String, Integer> typeQuantityMap = new HashMap<>();
 
         // Lặp lại danh sách các đối tượng KhoHang và tính tổng số lượng cho từng loại
@@ -349,7 +357,8 @@ public class viewTP extends JFrame implements Subcriber{
             String type = (String) tableModel.getValueAt(i, 1); // Assuming the type is in the second column (index 1)
             int quantity = (int) tableModel.getValueAt(i, 2); // Assuming the quantity is in the third column (index 2)
 
-            //Kiểm tra xem loại đã có chưa the map, if yes, update the total quantity, nếu không thì, add it to the map
+            // Kiểm tra xem loại đã có chưa the map, if yes, update the total quantity, nếu
+            // không thì, add it to the map
             typeQuantityMap.put(type, typeQuantityMap.getOrDefault(type, 0) + quantity);
         }
 
