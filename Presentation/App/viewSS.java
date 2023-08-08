@@ -239,7 +239,7 @@ public class viewSS extends JFrame implements Subcriber{
         String nhaSanXuat = nhaSanXuatTextField.getText();
         Date ngayNhapKho = parseDate(ngayNhapKhoTextField.getText());
 
-        if (soLuongTon < 0 || donGia <= 0) {
+        if (name.isEmpty() || soLuongTon < 0 || donGia <= 0) {
             JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
             clearFieldS();
         } else {

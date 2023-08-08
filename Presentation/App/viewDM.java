@@ -179,7 +179,7 @@ public class viewDM extends JFrame implements Subcriber{
         int baoHanh = Integer.parseInt(baoHanhTextField.getText());
         double congSuat = Double.parseDouble(congSuatTextField.getText());
 
-        if (soLuongTon < 0 || donGia <= 0 || baoHanh <= 0 || congSuat < 0) {
+        if (name.isEmpty() || soLuongTon < 0 || donGia <= 0 || baoHanh <= 0 || congSuat < 0) {
             JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
             clearFieldS();
         } else {

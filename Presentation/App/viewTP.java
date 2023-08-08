@@ -206,7 +206,7 @@ public class viewTP extends JFrame implements Subcriber {
         Date ngayHetHan = parseDate(ngayHetHanTextField.getText());
         String nhaCungCap = nhaCungCapTextField.getText();
 
-        if (soLuongTon < 0 || donGia <= 0) {
+        if (name.isEmpty() || soLuongTon < 0 || donGia <= 0) {
             JOptionPane.showMessageDialog(this, "Lỗi. Vui lòng nhập lại cho đúng thông tin");
             clearFieldS();
         } else {
