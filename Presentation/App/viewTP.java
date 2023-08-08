@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -226,7 +227,7 @@ public class viewTP extends JFrame implements Subcriber {
         if (row == -1) {
             JOptionPane.showMessageDialog(this, "Chọn thực phẩm trên bảng để cập nhật");
         }
-
+        
         int result = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn cập nhật hàng?", "Xác nhận cập nhật hàng", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             int id = Integer.parseInt(idTextField.getText());
@@ -254,6 +255,9 @@ public class viewTP extends JFrame implements Subcriber {
 
     }
 
+    
+    
+
     // DELETE ITEMS
     private void deleteItems() {
         int row = table.getSelectedRow();
@@ -272,45 +276,32 @@ public class viewTP extends JFrame implements Subcriber {
 
     }
 
-    // FIND ITEMS BY WEEK
     private void findItems() {
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một dòng trong bảng để tìm kiếm.");
-            return;
-        }
-
         try {
-            // Get the selected ThucPham object from the table row
-            int id = (int) tableModel.getValueAt(selectedRow, 0);
-            String name = (String) tableModel.getValueAt(selectedRow, 1);
-            int soLuongTon = (int) tableModel.getValueAt(selectedRow, 2);
-            double donGia = (double) tableModel.getValueAt(selectedRow, 3);
-            Date ngaySanXuat = (Date) tableModel.getValueAt(selectedRow, 5);
-            Date ngayHetHan = (Date) tableModel.getValueAt(selectedRow, 6);
-            String nhaCungCap = (String) tableModel.getValueAt(selectedRow, 4);
-
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-            String ngaySanXuatString = dateFormat.format(ngaySanXuat);
-            String ngayHetHanString = dateFormat.format(ngayHetHan);
+            Date startDate = dateFormat.parse(ngaySanXuatTextField.getText());
+            Date endDate = dateFormat.parse(ngayHetHanTextField.getText());
+    
+            List<ThucPham> thucPhamRemote = tp_ServiceRemote.getTPOneWeek(startDate, endDate);
 
-            // Calculate the difference in days between the expiration date and the current
-            // date
-            long differenceInDays = (ngayHetHan.getTime() - ngaySanXuat.getTime()) / (1000 * 60 * 60 * 24);
-
-            if (differenceInDays < 7) {
-                JOptionPane.showMessageDialog(this,
-                        "Sản phẩm " + name + " còn hạn sử dụng từ ngày " + ngaySanXuatString + " đến ngày " + ngayHetHanString);
+            long differenceInDays = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
+    
+            if (!thucPhamRemote.isEmpty() && differenceInDays < 7) {
+                StringBuilder message = new StringBuilder("Các sản phẩm còn 1 tuần hết hạn trong kho là ");
+                message.append(dateFormat.format(startDate)).append("  ").append(dateFormat.format(endDate)).append(":\n");
+                for (ThucPham thucPham : thucPhamRemote) {
+                    message.append("- ").append(thucPham.getName()).append(" (Số lượng tồn: ").append(thucPham.getSoLuongTon()).append(")\n");
+                }
+                JOptionPane.showMessageDialog(this, message.toString());
             } else {
-                JOptionPane.showMessageDialog(this, "Không tìm tháy sản phẩm này");
+                JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm nào còn 1 tuần hết hạn trong kho ");
             }
-        } catch (NumberFormatException ex) {
-
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng ngày (yyyy/MM/dd).");
         }
-
         publisherRemote.notifyObserver();
-
     }
+    
 
     // CONVERT DATE
     private Date parseDate(String dateString) {

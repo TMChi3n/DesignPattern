@@ -105,6 +105,8 @@ public class HangTP_JdbcGateway implements HangTP_Gateway {
         return thucPham;
     }
 
+    
+
     @Override
     public List<ThucPham> getAllTP() {
         List<ThucPham> thucPham = new ArrayList<>();
