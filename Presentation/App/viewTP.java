@@ -277,27 +277,21 @@ public class viewTP extends JFrame implements Subcriber {
     }
 
     private void findItems() {
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-            Date startDate = dateFormat.parse(ngaySanXuatTextField.getText());
-            Date endDate = dateFormat.parse(ngayHetHanTextField.getText());
-    
-            List<ThucPham> thucPhamRemote = tp_ServiceRemote.getTPOneWeek(startDate, endDate);
+        Date startDate = parseDate(ngaySanXuatTextField.getText());
+        Date endDate = parseDate(ngayHetHanTextField.getText());
+   
+        List<ThucPham> thucPhamRemote = tp_ServiceRemote.getTPOneWeek(startDate, endDate);
 
-            long differenceInDays = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
-    
-            if (!thucPhamRemote.isEmpty() && differenceInDays < 7) {
-                StringBuilder message = new StringBuilder("Các sản phẩm còn 1 tuần hết hạn trong kho là ");
-                message.append(dateFormat.format(startDate)).append("  ").append(dateFormat.format(endDate)).append(":\n");
-                for (ThucPham thucPham : thucPhamRemote) {
-                    message.append("- ").append(thucPham.getName()).append(" (Số lượng tồn: ").append(thucPham.getSoLuongTon()).append(")\n");
-                }
-                JOptionPane.showMessageDialog(this, message.toString());
-            } else {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm nào còn 1 tuần hết hạn trong kho ");
+        long differenceInDays = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
+   
+        if (!thucPhamRemote.isEmpty() && differenceInDays < 7) {
+            StringBuilder message = new StringBuilder("Các sản phẩm còn 1 tuần hết hạn trong kho là:\n");
+            for (ThucPham thucPham : thucPhamRemote) {
+                message.append("- ").append(thucPham.getName()).append(" (Số lượng tồn: ").append(thucPham.getSoLuongTon()).append(")\n");
             }
-        } catch (ParseException ex) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng ngày (yyyy/MM/dd).");
+            JOptionPane.showMessageDialog(this, message.toString());
+        } else {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm nào còn 1 tuần hết hạn trong kho ");
         }
         publisherRemote.notifyObserver();
     }
